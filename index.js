@@ -10,7 +10,7 @@ function startGame() { // Функция начала игры
   $game.style.backgroundColor = '#fff'; // Добавляем белый фон
   renderBox();
 }
-
+ 
 function handleBoxClick(event) {
   if (event.target.dataset.box) {
     renderBox();
