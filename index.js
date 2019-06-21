@@ -1,18 +1,41 @@
 var $start = document.querySelector('#start');
 var $game = document.querySelector('#game');
+var $time = document.querySelector('#time'); 
+
 var score = 0; // Переменная, для подсчета результата
+var isGameStarted = false; // Переменная для отслеживания состояния игры (изначально false, после начала игры становится true, когда время кончается, меняем на false)
 
 $start.addEventListener('click', startGame); // Начало игры по клику
 
 $game.addEventListener('click', handleBoxClick); // функция, которая при клике будет заново создавать квадрат
 
 function startGame() { // Функция начала игры
+  isGameStarted = true;
   $start.classList.add('hide');  // Добавляем класс hide и скрываем кнопку
   $game.style.backgroundColor = '#fff'; // Добавляем белый фон
+
+  var interval = setInterval(function() {  // Функция setInterval производит действие каждые x милисекунд
+    var time = parseFloat($time.textContent);
+    
+    if (time <= 0) {
+      clearInterval(interval); // Останавливаем таймер, чтобы не кушать память
+      endGame();
+    } else {
+      $time.textContent = (time - 0.1).toFixed(1);
+    }
+  }, 100);
   renderBox();
 }
- 
+
+function endGame () {  // Функция окончания игры
+  isGameStarted = false;
+}
+
 function handleBoxClick(event) { // Если при клике по div с data-атрибутом box у нас значение true, то мы запускаем renderBox заново и прибавляем к результату +1
+  if (!isGameStarted) {
+    return; // Пишем return, чтобы данная функция не выполнялась
+  }
+
   if (event.target.dataset.box) { 
     score++;
     renderBox();
